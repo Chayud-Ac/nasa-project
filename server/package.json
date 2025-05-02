@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "src/server.js",
   "scripts": {
-    "test": "react-scripts test --env=jsdom --watchAll=false --ci",
+    "test": "jest --detectOpenHandles",
     "test-watch": "jest --watchAll",
     "watch": "node --watch src/server.js",
     "start": "node --watch src/server.js",
