@@ -1,5 +1,5 @@
 // this launches api test using jest framework with supertest to test the apis
-
+require('dotenv').config()
 const request = require('supertest');
 const app = require('../../app');
 const { mongoConnect , mongoDisconnect } = require('../../services/mongo')
