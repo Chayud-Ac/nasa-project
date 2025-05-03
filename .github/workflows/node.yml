@@ -13,10 +13,11 @@ jobs:
   build:  # This job is named 'build'
     env:
       CI: true  # Environment variable indicating CI environment
-
+      MONGO_URL: mongodb://localhost/nasa
     strategy:
       matrix:
         node-version: [18.x, 20.x]  # Run the job for both Node.js 18 and 20
+        mongodb-version: ['4.4']
 
     runs-on: ubuntu-latest  # Use the latest Ubuntu environment
 
@@ -29,12 +30,16 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-
-      # Step 3: Install dependencies
+      # Step 3: Set up MongoDB specifically for testing
+      - name: Use MongoDb from github Actions
+        uses: supercharge/mongodb-github-action@1.12.0
+        with:
+            mongodb-version: ${{ matrix.mongodb-version }}
+      # Step 4: Install dependencies
       - run: npm install
 
-      # Step 4: Build the frontend (in the 'client' directory)
+      # Step 5: Build the frontend (in the 'client' directory)
       - run: npm run build --prefix client
 
-      # Step 5: Run tests
+      # Step 6: Run tests
       - run: npm test
