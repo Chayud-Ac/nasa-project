@@ -1,23 +1,40 @@
+# This is the name of the workflow, shown in the GitHub Actions UI
 name: NASA Project CI
+
+# This tells GitHub to run the workflow on specific events
 on:
-    push:
-        branches: [ main ]
-    pull_request:
-        branches: [ main ]
-jobs: 
-    build:
-        env:
-            CI: true
-        strategy:
-            matrix: 
-                node-version: [18.x , 20.x]
-        runs-on: ubuntu-latest
-        steps: 
-            - uses: actions/checkout@v2
-            - name: Use Node.js version ${{ matrix.node-version }}
-              uses: actions/setup-node@v2
-              with:
-                node-version: ${{ matrix.node-version }}
-            - run: npm install
-            - run: npm run build --prefix client
-            - run: npm test
+  push:
+    branches: [ main ]  # Trigger on push to 'main' branch
+  pull_request:
+    branches: [ main ]  # Trigger on pull request to 'main' branch
+
+# Jobs are independent sets of tasks that run on their own virtual machines
+jobs:
+  build:  # This job is named 'build'
+    env:
+      CI: true  # Environment variable indicating CI environment
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]  # Run the job for both Node.js 18 and 20
+
+    runs-on: ubuntu-latest  # Use the latest Ubuntu environment
+
+    steps:
+      # Step 1: Checkout the repo code
+      - uses: actions/checkout@v2
+
+      # Step 2: Set up Node.js with the specified version from the matrix
+      - name: Use Node.js version ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      # Step 3: Install dependencies
+      - run: npm install
+
+      # Step 4: Build the frontend (in the 'client' directory)
+      - run: npm run build --prefix client
+
+      # Step 5: Run tests
+      - run: npm test
